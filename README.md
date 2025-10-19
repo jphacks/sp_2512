@@ -41,6 +41,7 @@
 ### 今後の展望（課題）
 ・スマホアプリ化  
 ・ネット上のニュースサイトからの情報を自動取得  
+・交通事故などやクマの事件など危険な情報をジャンル分けした上で、地図上にあげるアイコン等を個別に設定して一目見た時に分かりやすくしたい
 
 ### 注力したこと（こだわり等）
 ・危険な場所に近づくと通知が来るシステムを実装し、より利便性を向上させました。  
@@ -48,7 +49,7 @@
 
 
 ## 開発技術
-TypeScript,JavaScript,CSS
+VercelV0,TypeScript,JavaScript,CSS
 ### 活用した技術
 
 #### API・データ
@@ -56,7 +57,7 @@ TypeScript,JavaScript,CSS
 * ipapi.co API
 * OpenStreetMap
 * DeviceOrientationEvent API
-* 
+  
 
 #### フレームワーク・ライブラリ・モジュール
 * React
