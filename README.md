@@ -2,10 +2,12 @@
 
 [![IMAGE ALT TEXT HERE](https://github.com/jphacks/sp_2512/blob/main/IMG_7604.png)]()
 
-スライド：https://docs.google.com/presentation/d/1JMM2O7qtzUAUqwCBoM4VeS3165lL3NgoARgwabCjhiE/edit?usp=sharing
+スライド：https://docs.google.com/presentation/d/1JMM2O7qtzUAUqwCBoM4VeS3165lL3NgoARgwabCjhiE/edit?usp=sharing　　
+
 
 ## 製品概要
 
+こちらから利用できます！　→　https://v0.app/chat/map-app-for-safety-qb73vLbso6S
 
 ### 背景(製品開発のきっかけ、課題等）
 北海道大学構内は自転車や人が急に飛び出してくることがたまにあり、北大構内に来たことがない方だとそういった危険情報が事前に分からず驚いてしまったり、実際危ない目に遭ってしまう可能性があります。まずはこの課題を解決したいという些細なきっかけから、このプロダクトを作ることになりました。
@@ -40,7 +42,7 @@
 
 ### 注力したこと（こだわり等）
 *危険な場所に近づくと通知が来るシステムを実装し、より利便性を向上させました。
-* 治安情報、事件情報などをカテゴリ別に画面を分け、情報を見やすい様にしました。
+*治安情報、事件情報などをカテゴリ別に画面を分け、情報を見やすい様にしました。
 
 
 ## 開発技術
@@ -60,8 +62,3 @@ TypeScript,JavaScript,CSS
 * Next.js
   
 
-### 独自技術
-
-#### ハッカソンで開発した独自機能・技術
-* 独自で開発したものの内容をこちらに記載してください
-* 特に力を入れた部分をファイルリンク、またはcommit_idを記載してください。
