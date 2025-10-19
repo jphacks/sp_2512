@@ -1,6 +1,6 @@
 # Safer Map
 
-[![IMAGE ALT TEXT HERE](https://drive.google.com/file/d/1RYRsTELZVbDE6_0np1RdmLhu__NZuTfE/view?usp=sharing)]()
+[![IMAGE ALT TEXT HERE](https://github.com/jphacks/sp_2512/blob/main/IMG_7604.png)]()
 
 ## 製品概要
 
