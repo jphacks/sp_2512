@@ -2,7 +2,7 @@
 
 [![IMAGE ALT TEXT HERE](https://github.com/jphacks/sp_2512/blob/main/image/IMG_7605.png)]()
 
-スライド：https://docs.google.com/presentation/d/1JMM2O7qtzUAUqwCBoM4VeS3165lL3NgoARgwabCjhiE/edit?usp=sharing　　
+スライド（動画はアクセス権申請を別途お願いします🙏）https://docs.google.com/presentation/d/1JMM2O7qtzUAUqwCBoM4VeS3165lL3NgoARgwabCjhiE/edit?usp=sharing　　
 
 
 ## 製品概要
