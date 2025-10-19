@@ -2,10 +2,12 @@
 
 [![IMAGE ALT TEXT HERE](https://github.com/jphacks/sp_2512/blob/main/IMG_7604.png)]()
 
-スライド：https://docs.google.com/presentation/d/1JMM2O7qtzUAUqwCBoM4VeS3165lL3NgoARgwabCjhiE/edit?usp=sharing
+スライド：https://docs.google.com/presentation/d/1JMM2O7qtzUAUqwCBoM4VeS3165lL3NgoARgwabCjhiE/edit?usp=sharing　　
+
 
 ## 製品概要
 
+こちらから利用できます！　→　https://v0.app/chat/map-app-for-safety-qb73vLbso6S
 
 ### 背景(製品開発のきっかけ、課題等）
 北海道大学構内は自転車や人が急に飛び出してくることがたまにあり、北大構内に来たことがない方だとそういった危険情報が事前に分からず驚いてしまったり、実際危ない目に遭ってしまう可能性があります。まずはこの課題を解決したいという些細なきっかけから、このプロダクトを作ることになりました。
