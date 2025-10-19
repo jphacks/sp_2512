@@ -1,6 +1,6 @@
 # Safer Map
 
-[![IMAGE ALT TEXT HERE](https://drive.google.com/file/d/1RYRsTELZVbDE6_0np1RdmLhu__NZuTfE/view?usp=sharing)](https://www.youtube.com/watch?v=lA9EluZugD8)
+[![IMAGE ALT TEXT HERE](https://drive.google.com/file/d/1RYRsTELZVbDE6_0np1RdmLhu__NZuTfE/view?usp=sharing)]()
 
 ## 製品概要
 
