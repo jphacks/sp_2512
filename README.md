@@ -1,6 +1,6 @@
 # Safer Map
 
-[![IMAGE ALT TEXT HERE](https://github.com/jphacks/sp_2512/blob/main/IMG_7604.png)]()
+[![IMAGE ALT TEXT HERE](https://github.com/jphacks/sp_2512/blob/main/IMG_7605.png)]()
 
 スライド：https://docs.google.com/presentation/d/1JMM2O7qtzUAUqwCBoM4VeS3165lL3NgoARgwabCjhiE/edit?usp=sharing　　
 
@@ -37,12 +37,12 @@
 ・慣れない土地を運転する際、複雑な交差点情報などを事前に知ることが出来る
 
 ### 今後の展望（課題）
-*スマホアプリ化
-*ネット上のニュースサイトからの情報を自動取得
+・スマホアプリ化  
+・ネット上のニュースサイトからの情報を自動取得  
 
 ### 注力したこと（こだわり等）
-*危険な場所に近づくと通知が来るシステムを実装し、より利便性を向上させました。
-*治安情報、事件情報などをカテゴリ別に画面を分け、情報を見やすい様にしました。
+・危険な場所に近づくと通知が来るシステムを実装し、より利便性を向上させました。  
+・治安情報、事件情報などをカテゴリ別に画面を分け、情報を見やすい様にしました。  
 
 
 ## 開発技術
