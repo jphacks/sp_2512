@@ -1,6 +1,6 @@
 # Safer Map
 
-[![IMAGE ALT TEXT HERE](https://github.com/jphacks/sp_2512/blob/main/IMG_7605.png)]()
+[![IMAGE ALT TEXT HERE](https://github.com/jphacks/sp_2512/blob/main/image/IMG_7605.png)]()
 
 スライド：https://docs.google.com/presentation/d/1JMM2O7qtzUAUqwCBoM4VeS3165lL3NgoARgwabCjhiE/edit?usp=sharing　　
 
@@ -17,10 +17,12 @@
 
 ### 製品説明（具体的な製品の説明）
 まず、最初にログイン画面が出るのでログインします。
+https://github.com/jphacks/sp_2512/blob/main/image/%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%B7%E3%83%A7%E3%83%83%E3%83%88%202025-10-20%20072602.png　　
 
 何か危険な場所に300m以内まで近づいたら、通知が出ます。(300m先、このような事故がありましたなど)
 
-また、情報を見るだけではなく、実際に自分が危険な目に遭ったり危険だなと思う場所があれば、投稿ボタンから場所を指定し、危険の詳細を入力して投稿することが出来ます。
+また、情報を見るだけではなく、実際に自分が危険な目に遭ったり危険だなと思う場所があれば、投稿ボタンから場所を指定し、危険の詳細を入力して投稿することが出来ます。　　
+https://github.com/jphacks/sp_2512/blob/main/image/%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%B7%E3%83%A7%E3%83%83%E3%83%88%202025-10-20%20072817.png
 
 危険情報としてはユーザーが投稿した情報だけではなく、ニュースサイトから引っ張ってきた事件情報なども表示できるようにしています。
 
