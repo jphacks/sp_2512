@@ -100,7 +100,29 @@ export async function login(email: string, password: string): Promise<User> {
 
   if (!storedUser) {
     console.log("[v0] User not found for email:", email)
-    throw new Error("メールアドレスまたはパスワードが正しくありません")
+
+    const availableEmails = Object.keys(users)
+    const similarEmails = availableEmails.filter((existingEmail) => {
+      // Check if the email is similar (same local part or similar domain)
+      const inputLocal = email.split("@")[0]
+      const inputDomain = email.split("@")[1]
+      const existingLocal = existingEmail.split("@")[0]
+      const existingDomain = existingEmail.split("@")[1]
+
+      return (
+        inputLocal === existingLocal ||
+        (inputDomain &&
+          existingDomain &&
+          (inputDomain.includes(existingDomain.substring(0, 5)) ||
+            existingDomain.includes(inputDomain.substring(0, 5))))
+      )
+    })
+
+    if (similarEmails.length > 0) {
+      throw new Error(`このメールアドレスは登録されていません。もしかして: ${similarEmails[0]} ですか？`)
+    }
+
+    throw new Error("このメールアドレスは登録されていません。新規登録してください。")
   }
 
   console.log("[v0] User found, checking password...")
@@ -109,7 +131,7 @@ export async function login(email: string, password: string): Promise<User> {
 
   if (passwordHash !== storedUser.passwordHash) {
     console.log("[v0] Password mismatch")
-    throw new Error("メールアドレスまたはパスワードが正しくありません")
+    throw new Error("パスワードが正しくありません")
   }
 
   const user: User = {

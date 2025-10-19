@@ -8,6 +8,7 @@ import { getCurrentUser } from "@/lib/auth"
 import { hasUserLiked, getLikeCount } from "@/lib/likes"
 import { Loader2 } from "lucide-react"
 import { getLocation } from "@/lib/geolocation"
+import { calculateDistance } from "@/lib/news"
 
 interface MapViewProps {
   reports: Report[]
@@ -38,6 +39,57 @@ export function MapView({
   const [heading, setHeading] = useState<number | null>(null)
   const reportMarkersRef = useRef<any[]>([])
   const newsMarkersRef = useRef<any[]>([])
+  const notifiedLocationsRef = useRef<Set<string>>(new Set())
+  const [notificationPermission, setNotificationPermission] = useState<NotificationPermission>("default")
+
+  useEffect(() => {
+    if ("Notification" in window) {
+      if (Notification.permission === "default") {
+        Notification.requestPermission().then((permission) => {
+          setNotificationPermission(permission)
+          console.log("[v0] Notification permission:", permission)
+        })
+      } else {
+        setNotificationPermission(Notification.permission)
+      }
+    }
+  }, [])
+
+  const checkProximity = (currentLat: number, currentLng: number) => {
+    const THRESHOLD_METERS = 300
+    const allLocations = [...newsReports]
+
+    allLocations.forEach((location) => {
+      const distanceKm = calculateDistance(currentLat, currentLng, location.latitude, location.longitude)
+      const distanceMeters = distanceKm * 1000
+
+      if (distanceMeters <= THRESHOLD_METERS) {
+        const locationKey = location.id
+
+        if (!notifiedLocationsRef.current.has(locationKey)) {
+          notifiedLocationsRef.current.add(locationKey)
+
+          const message = "危険な場所が近くにあります " + Math.round(distanceMeters) + "m先 " + location.title
+
+          if (notificationPermission === "granted") {
+            new Notification("Safer Map", {
+              body: message,
+              icon: "/icon.png",
+            })
+          } else {
+            alert(message)
+          }
+
+          console.log("[v0] Proximity alert:", location.title, Math.round(distanceMeters) + "m")
+        }
+      } else {
+        const locationKey = location.id
+        if (notifiedLocationsRef.current.has(locationKey)) {
+          notifiedLocationsRef.current.delete(locationKey)
+        }
+      }
+    })
+  }
 
   useEffect(() => {
     const savedLocation = localStorage.getItem("userLocation")
@@ -121,7 +173,6 @@ export function MapView({
   }, [])
 
   const addUserLocationMarker = (L: any, map: any, location: [number, number]) => {
-    // Remove existing marker group completely
     if (userMarkerRef.current) {
       map.removeLayer(userMarkerRef.current)
       userMarkerRef.current = null
@@ -131,10 +182,8 @@ export function MapView({
       directionSectorRef.current = null
     }
 
-    // Create all layers
     const layers: any[] = []
 
-    // Accuracy circle
     const accuracyCircle = L.circle(location, {
       color: "#4285F4",
       fillColor: "#4285F4",
@@ -144,7 +193,6 @@ export function MapView({
     })
     layers.push(accuracyCircle)
 
-    // Location dot
     const locationDot = L.circleMarker(location, {
       color: "#FFFFFF",
       fillColor: "#4285F4",
@@ -154,7 +202,6 @@ export function MapView({
     })
     layers.push(locationDot)
 
-    // Direction sector (if heading is available)
     if (heading !== null) {
       const sectorAngle = 45
       const sectorRadius = 80
@@ -187,10 +234,8 @@ export function MapView({
       directionSectorRef.current = directionSector
     }
 
-    // Create a single layer group containing all layers
     userMarkerRef.current = L.layerGroup(layers).addTo(map)
 
-    // Add popup to the location dot
     locationDot.bindPopup(
       '<div style="text-align: center; font-size: 16px; font-weight: 600; padding: 8px;">📍 現在地</div>',
     )
@@ -208,13 +253,15 @@ export function MapView({
 
     watchIdRef.current = navigator.geolocation.watchPosition(
       (position) => {
-        console.log("[v0] 📍 Location updated!")
+        console.log("[v0] Location updated!")
         console.log("[v0] Latitude:", position.coords.latitude)
         console.log("[v0] Longitude:", position.coords.longitude)
         console.log("[v0] Accuracy:", position.coords.accuracy, "meters")
 
         const location: [number, number] = [position.coords.latitude, position.coords.longitude]
         setUserLocation(location)
+
+        checkProximity(position.coords.latitude, position.coords.longitude)
 
         if (position.coords.accuracy < 500) {
           localStorage.setItem("userLocation", JSON.stringify(location))
@@ -226,20 +273,22 @@ export function MapView({
         if (mapInstanceRef.current && LeafletRef.current) {
           const L = LeafletRef.current
           addUserLocationMarker(L, mapInstanceRef.current, location)
+
+          mapInstanceRef.current.setView(location)
+          console.log("[v0] Map center moved to current location")
         }
       },
       (error) => {
-        console.error("[v0] ❌ Tracking error:", error.code, error.message)
+        console.error("[v0] Tracking error:", error.code, error.message)
 
         getLocation().then((locationData) => {
           if (locationData) {
-            console.log("[v0] ✅ Fallback to IP-based location")
+            console.log("[v0] Fallback to IP-based location")
             const location: [number, number] = [locationData.latitude, locationData.longitude]
             setUserLocation(location)
 
             console.log("[v0] IP-based location NOT saved (low accuracy:", locationData.accuracy, "m)")
-            console.log("[v0] ⚠️ IP-based location marker NOT added (waiting for accurate GPS)")
-            // Don't add marker for IP-based location - wait for accurate GPS
+            console.log("[v0] IP-based location marker NOT added (waiting for accurate GPS)")
           }
         })
       },
@@ -259,7 +308,7 @@ export function MapView({
         watchIdRef.current = null
       }
     }
-  }, [])
+  }, [newsReports, notificationPermission])
 
   useEffect(() => {
     if (typeof window === "undefined" || !mapRef.current) return
@@ -367,7 +416,6 @@ export function MapView({
     const L = LeafletRef.current
     const map = mapInstanceRef.current
 
-    // Remove existing markers
     reportMarkersRef.current.forEach((marker) => map.removeLayer(marker))
     reportMarkersRef.current = []
     newsMarkersRef.current.forEach((marker) => map.removeLayer(marker))
@@ -375,7 +423,6 @@ export function MapView({
 
     const currentUser = getCurrentUser()
 
-    // Add report markers
     reports.forEach((report) => {
       const color = getDangerLevelColor(report.dangerLevel)
 
@@ -470,7 +517,6 @@ export function MapView({
       reportMarkersRef.current.push(circle)
     })
 
-    // Add news markers
     newsReports.forEach((news) => {
       let markerColor = "green"
       if (news.dangerLevel === "high") {

@@ -31,9 +31,7 @@ export function LocationPicker({ open, onOpenChange, onLocationSelect, initialLo
       return
     }
 
-    // Wait for DOM to be ready
     const initMap = async () => {
-      // Wait a bit for the dialog to fully render
       await new Promise((resolve) => setTimeout(resolve, 100))
 
       if (!mapRef.current) {
@@ -47,7 +45,6 @@ export function LocationPicker({ open, onOpenChange, onLocationSelect, initialLo
         const L = (await import("leaflet")).default
         LeafletRef.current = L
 
-        // Fix for default marker icon
         delete (L.Icon.Default.prototype as any)._getIconUrl
         L.Icon.Default.mergeOptions({
           iconRetinaUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png",
@@ -62,7 +59,13 @@ export function LocationPicker({ open, onOpenChange, onLocationSelect, initialLo
 
         const center = selectedLocation || [35.6762, 139.6503]
         console.log("[v0] LocationPicker: Creating map with center:", center)
-        const map = L.map(mapRef.current).setView(center, 15)
+        const map = L.map(mapRef.current, {
+          zoomControl: true,
+          scrollWheelZoom: true,
+          doubleClickZoom: true,
+          touchZoom: true,
+          dragging: true,
+        }).setView(center, 16)
         mapInstanceRef.current = map
 
         L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
@@ -72,26 +75,28 @@ export function LocationPicker({ open, onOpenChange, onLocationSelect, initialLo
 
         console.log("[v0] LocationPicker: Map created successfully")
 
-        // Add initial marker if location is set
         if (selectedLocation) {
           markerRef.current = L.marker(selectedLocation).addTo(map)
           console.log("[v0] LocationPicker: Initial marker added")
         }
 
-        // Handle map clicks
         map.on("click", (e: any) => {
           const { lat, lng } = e.latlng
-          console.log("[v0] LocationPicker: Map clicked at:", lat, lng)
+          console.log("[v0] LocationPicker: ✅ Map clicked at:", lat, lng)
           setSelectedLocation([lat, lng])
 
-          // Remove old marker
           if (markerRef.current) {
             markerRef.current.remove()
           }
 
-          // Add new marker
           markerRef.current = L.marker([lat, lng]).addTo(map)
+          console.log("[v0] LocationPicker: Marker updated to clicked location")
         })
+
+        setTimeout(() => {
+          map.invalidateSize()
+          console.log("[v0] LocationPicker: Map size invalidated")
+        }, 200)
 
         setIsLoading(false)
         console.log("[v0] LocationPicker: Initialization complete")
@@ -146,14 +151,12 @@ export function LocationPicker({ open, onOpenChange, onLocationSelect, initialLo
         setSelectedLocation([lat, lng])
 
         if (mapInstanceRef.current && LeafletRef.current) {
-          mapInstanceRef.current.setView([lat, lng], 15)
+          mapInstanceRef.current.setView([lat, lng], 16)
 
-          // Remove old marker
           if (markerRef.current) {
             markerRef.current.remove()
           }
 
-          // Add new marker
           markerRef.current = LeafletRef.current.marker([lat, lng]).addTo(mapInstanceRef.current)
           console.log("[v0] LocationPicker: Marker updated to current location")
         }
@@ -162,27 +165,17 @@ export function LocationPicker({ open, onOpenChange, onLocationSelect, initialLo
         console.error("[v0] LocationPicker: ❌ Geolocation error occurred!")
         console.error("[v0] LocationPicker: Error code:", error.code)
         console.error("[v0] LocationPicker: Error message:", error.message)
-        console.error(
-          "[v0] LocationPicker: Full error object:",
-          JSON.stringify({
-            code: error.code,
-            message: error.message,
-            PERMISSION_DENIED: error.code === 1,
-            POSITION_UNAVAILABLE: error.code === 2,
-            TIMEOUT: error.code === 3,
-          }),
-        )
 
         let errorMessage = "位置情報の取得に失敗しました"
 
         switch (error.code) {
-          case 1: // PERMISSION_DENIED
+          case 1:
             errorMessage = "位置情報の使用が許可されていません。ブラウザの設定を確認してください。"
             break
-          case 2: // POSITION_UNAVAILABLE
+          case 2:
             errorMessage = "位置情報を取得できませんでした。しばらくしてから再度お試しください。"
             break
-          case 3: // TIMEOUT
+          case 3:
             errorMessage = "位置情報の取得がタイムアウトしました。再度お試しください。"
             break
         }
@@ -199,31 +192,51 @@ export function LocationPicker({ open, onOpenChange, onLocationSelect, initialLo
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-3xl h-[80vh]">
-        <DialogHeader>
-          <DialogTitle>地図上で場所を選択</DialogTitle>
-          <DialogDescription>地図をクリックして危険な場所を選択してください</DialogDescription>
+      <DialogContent className="max-w-3xl h-[75vh] flex flex-col p-0 overflow-hidden">
+        <DialogHeader className="px-6 pt-4 pb-2 shrink-0 border-b">
+          <DialogTitle className="text-lg">地図上で場所を選択</DialogTitle>
+          <DialogDescription className="text-sm">
+            地図をタップまたはクリックして場所を選択してください
+          </DialogDescription>
         </DialogHeader>
-        <div className="flex flex-col gap-4 h-full">
-          <div className="relative flex-1">
+        <div className="px-3 py-3 flex-1 overflow-hidden">
+          <div
+            className="relative w-full rounded-lg overflow-hidden"
+            style={{
+              height: "45vh",
+              minHeight: "300px",
+              touchAction: "auto",
+              WebkitTouchCallout: "none",
+              WebkitUserSelect: "none",
+            }}
+          >
             {isLoading && (
-              <div className="absolute inset-0 flex items-center justify-center bg-muted z-10">
+              <div className="absolute inset-0 flex items-center justify-center bg-muted z-[1000] rounded-lg">
                 <Loader2 className="w-8 h-8 animate-spin text-muted-foreground" />
               </div>
             )}
-            <div ref={mapRef} className="w-full h-full rounded-lg" style={{ minHeight: "400px" }} />
+            <div
+              ref={mapRef}
+              className="w-full h-full rounded-lg"
+              style={{
+                zIndex: 1,
+                touchAction: "auto",
+              }}
+            />
           </div>
-          <div className="flex gap-2">
+        </div>
+        <div className="px-4 pb-4 pt-3 shrink-0 border-t bg-background sticky bottom-0">
+          <div className="flex gap-3">
             <Button
               type="button"
               variant="outline"
               onClick={handleGetCurrentLocation}
-              className="flex-1 bg-transparent"
+              className="flex-1 h-12 text-base font-medium bg-transparent"
             >
-              <MapPin className="w-4 h-4 mr-2" />
+              <MapPin className="w-5 h-5 mr-2" />
               現在地を取得
             </Button>
-            <Button onClick={handleConfirm} disabled={!selectedLocation} className="flex-1">
+            <Button onClick={handleConfirm} disabled={!selectedLocation} className="flex-1 h-12 text-base font-medium">
               この場所に決定
             </Button>
           </div>

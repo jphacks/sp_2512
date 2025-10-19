@@ -9,7 +9,7 @@ const _geist = Geist({ subsets: ["latin"] })
 const _geistMono = Geist_Mono({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "安全マップ - SafetyMap",
+  title: "Safer Map",
   description: "旅行者向けの安全情報共有マップアプリ",
   generator: "v0.app",
 }

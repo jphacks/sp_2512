@@ -22,8 +22,9 @@ export function UserMenu({ user }: UserMenuProps) {
 
   const handleLogout = () => {
     logout()
-    router.push("/login")
-    router.refresh()
+    // Use window.location.href instead of router.push to force a full page reload
+    // This ensures all state is cleared and AuthWrapper re-runs
+    window.location.href = "/login"
   }
 
   return (

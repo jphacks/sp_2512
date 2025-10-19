@@ -10,7 +10,7 @@ import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { login, signup } from "@/lib/auth"
-import { Mail, Lock, User } from "lucide-react"
+import { Mail, Lock, User, Eye, EyeOff } from "lucide-react"
 
 export function LoginForm() {
   const router = useRouter()
@@ -20,6 +20,8 @@ export function LoginForm() {
   const [signupName, setSignupName] = useState("")
   const [signupPassword, setSignupPassword] = useState("")
   const [isLoading, setIsLoading] = useState(false)
+  const [showLoginPassword, setShowLoginPassword] = useState(false)
+  const [showSignupPassword, setShowSignupPassword] = useState(false)
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -33,14 +35,10 @@ export function LoginForm() {
 
     try {
       await login(loginEmail, loginPassword)
-      await new Promise((resolve) => setTimeout(resolve, 100))
-      console.log("[v0] Redirecting to home page")
-      router.push("/")
-      router.refresh()
+      window.location.href = "/"
     } catch (error) {
       console.error("[v0] Login failed:", error)
       alert(error instanceof Error ? error.message : "ログインに失敗しました")
-    } finally {
       setIsLoading(false)
     }
   }
@@ -62,14 +60,10 @@ export function LoginForm() {
 
     try {
       await signup(signupEmail, signupName, signupPassword)
-      await new Promise((resolve) => setTimeout(resolve, 100))
-      console.log("[v0] Redirecting to home page")
-      router.push("/")
-      router.refresh()
+      window.location.href = "/"
     } catch (error) {
       console.error("[v0] Signup failed:", error)
       alert(error instanceof Error ? error.message : "登録に失敗しました")
-    } finally {
       setIsLoading(false)
     }
   }
@@ -77,7 +71,7 @@ export function LoginForm() {
   return (
     <Card className="w-full max-w-md">
       <CardHeader className="space-y-1">
-        <CardTitle className="text-2xl font-bold">安全マップ</CardTitle>
+        <CardTitle className="text-2xl font-bold">Safer Map</CardTitle>
         <CardDescription>ログインまたは新規登録してください</CardDescription>
       </CardHeader>
       <CardContent>
@@ -110,13 +104,21 @@ export function LoginForm() {
                   <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                   <Input
                     id="login-password"
-                    type="password"
+                    type={showLoginPassword ? "text" : "password"}
                     placeholder="••••••••"
-                    className="pl-10"
+                    className="pl-10 pr-10"
                     value={loginPassword}
                     onChange={(e) => setLoginPassword(e.target.value)}
                     required
                   />
+                  <button
+                    type="button"
+                    onClick={() => setShowLoginPassword(!showLoginPassword)}
+                    className="absolute right-3 top-3 text-muted-foreground hover:text-foreground transition-colors"
+                    aria-label={showLoginPassword ? "パスワードを隠す" : "パスワードを表示"}
+                  >
+                    {showLoginPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  </button>
                 </div>
               </div>
               <Button type="submit" className="w-full" disabled={isLoading}>
@@ -163,14 +165,22 @@ export function LoginForm() {
                   <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                   <Input
                     id="signup-password"
-                    type="password"
+                    type={showSignupPassword ? "text" : "password"}
                     placeholder="6文字以上"
-                    className="pl-10"
+                    className="pl-10 pr-10"
                     value={signupPassword}
                     onChange={(e) => setSignupPassword(e.target.value)}
                     required
                     minLength={6}
                   />
+                  <button
+                    type="button"
+                    onClick={() => setShowSignupPassword(!showSignupPassword)}
+                    className="absolute right-3 top-3 text-muted-foreground hover:text-foreground transition-colors"
+                    aria-label={showSignupPassword ? "パスワードを隠す" : "パスワードを表示"}
+                  >
+                    {showSignupPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  </button>
                 </div>
               </div>
               <Button type="submit" className="w-full" disabled={isLoading}>

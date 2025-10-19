@@ -1,8 +1,22 @@
+"use client"
+
 import Link from "next/link"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { AlertTriangle, Car, Merge, MapPin, Shield } from "lucide-react"
 
 export default function HomePage() {
+  const handleSafetyClick = () => {
+    console.log("[v0] Safety card clicked - navigating to /safety")
+  }
+
+  const handleAccidentClick = () => {
+    console.log("[v0] Accident card clicked - navigating to /accident")
+  }
+
+  const handleIntersectionClick = () => {
+    console.log("[v0] Intersection card clicked - navigating to /complex-intersection")
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-muted/30 to-accent/20">
       <div className="container mx-auto px-4 py-8 max-w-4xl">
@@ -20,19 +34,19 @@ export default function HomePage() {
             <Shield className="w-10 h-10 text-primary-foreground" />
           </div>
           <div className="relative inline-block">
-            <h1 className="relative text-6xl md:text-7xl font-black mb-4 bg-gradient-to-r from-foreground via-foreground to-foreground/80 bg-clip-text text-transparent tracking-tight drop-shadow-sm">
-              安全マップ
+            <h1 className="relative text-7xl md:text-8xl font-black mb-6 bg-gradient-to-r from-primary via-primary/90 to-primary/70 bg-clip-text text-transparent tracking-tighter drop-shadow-2xl [text-shadow:_0_4px_12px_rgb(0_0_0_/_20%)]">
+              Safer Map
             </h1>
           </div>
           <div className="relative inline-block px-6 py-2 rounded-full bg-background/80 backdrop-blur-sm shadow-lg">
             <p className="text-foreground text-xl text-balance font-semibold drop-shadow-md">
-              旅行者のための安全情報共有プラットフォーム
+              安全情報共有プラットフォーム
             </p>
           </div>
         </header>
 
         <div className="grid gap-6 mb-12 md:grid-cols-1">
-          <Link href="/safety" className="block group">
+          <Link href="/safety" className="block group" onClick={handleSafetyClick}>
             <Card className="border-0 shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden bg-gradient-to-br from-red-50 to-red-100 dark:from-red-950/30 dark:to-red-900/20 group-hover:scale-[1.02]">
               <div className="absolute inset-0 bg-gradient-to-br from-red-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
               <CardHeader className="relative">
@@ -60,7 +74,7 @@ export default function HomePage() {
             </Card>
           </Link>
 
-          <Link href="/accident" className="block group">
+          <Link href="/accident" className="block group" onClick={handleAccidentClick}>
             <Card className="border-0 shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-950/30 dark:to-orange-900/20 group-hover:scale-[1.02]">
               <div className="absolute inset-0 bg-gradient-to-br from-orange-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
               <CardHeader className="relative">
@@ -88,7 +102,7 @@ export default function HomePage() {
             </Card>
           </Link>
 
-          <Link href="/complex-intersection" className="block group">
+          <Link href="/complex-intersection" className="block group" onClick={handleIntersectionClick}>
             <Card className="border-0 shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden bg-gradient-to-br from-amber-50 to-amber-100 dark:from-amber-950/30 dark:to-amber-900/20 group-hover:scale-[1.02]">
               <div className="absolute inset-0 bg-gradient-to-br from-amber-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
               <CardHeader className="relative">
